@@ -4,6 +4,7 @@ import './App.css'
 import Header from './components/Header'
 import CatIndex from './pages/CatIndex'
 import CatShow from './pages/CatShow'
+import NewCat from './pages/NewCat'
 import cats from './cats'
 
 class App extends Component {
@@ -18,7 +19,9 @@ class App extends Component {
         <Router>
         <Header />
           <Switch>
-          <Route exact path="/" render={ (props) => <CatShow cats={ this.state.allCats } /> } />         
+            <Route exact path="/" render={ (props) => <CatIndex cats={ this.state.allCats } /> } />
+            <Route exact path="/catshow" render={ (props) => <CatShow cats={ this.state.allCats } /> } />
+            <Route exact path="/createcat" render={ () => <NewCat /> } />
           </Switch>
         </Router>
     )}
