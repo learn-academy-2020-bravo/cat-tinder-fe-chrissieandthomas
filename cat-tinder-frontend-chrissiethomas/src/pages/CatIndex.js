@@ -1,20 +1,39 @@
-import React, { Component } from 'react'
-import { ListGroup } from 'reactstrap'
+import React, { useState, useEffect } from 'react'
+import { ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Button } from 'reactstrap'
+import cats from '../cats'
 
-class CatIndex extends Component{
-    render(){ 
+const CatIndex = (props) => {
+    useEffect(() => { grabCats() }, [])
+    
+    async function grabCats () {
+        try {
+          let response = await fetch("http://localhost:3000/cats")
+          let data = await response.json();
+          if(response.status === 200) {
+            console.log("data", data)
+            setCats(data)
+        } 
+      } catch (err){
+        console.log(err)
+      }
+    }
+    const [allCats, setCats] = useState(cats)
         return(
         <React.Fragment>
-            { this.props.cats.map((cat, index)  => {
-                return(
-                <ListGroup key= { index }>
-                  <h4>{ cat.name }</h4>
-                  <small>{ cat.age } - { cat.enjoys }</small>
-                 </ListGroup>
-                )
-            })}
+            <ListGroup>
+                { allCats && allCats.map((cat, index) => {
+                    return(
+                    <ListGroupItem key= { index }>
+                    <ListGroupItemHeading>{ cat.name }</ListGroupItemHeading>
+                    <ListGroupItemText>Age: { cat.age }</ListGroupItemText>
+                    <ListGroupItemText>Enjoy: {cat.enjoy} </ListGroupItemText>
+                     </ListGroupItem>
+                    )
+                })}
+            </ListGroup>
+        <Button className="btn btn-info mb-2 float-left" href="/newcat">Add A Pet</Button>
         </React.Fragment>
         )
-    }
 }
+
 export default CatIndex;

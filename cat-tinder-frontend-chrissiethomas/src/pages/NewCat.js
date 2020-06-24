@@ -3,12 +3,12 @@ import React, { useState } from 'react'
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap'
 
 const NewCat = () => {
+    const [success, setSuccess] = useState(false)
     const [cats, setCats] = useState([])
-
     const [form, setForm] = useState({
       name: '',
       age: '',
-      enjoys: ''
+      enjoy: ''
     })
 
     const handleChange = e => {
@@ -26,15 +26,22 @@ const NewCat = () => {
       e.preventDefault()
       console.log(form)
       setCats(cats => [...cats,form])
+      pushCats(form).then(response => setSuccess(true))
     }
 
     const pushCats = (freshCat) =>  {
-
+      return fetch("http://localhost:3000/cats", {
+        body: JSON.stringify(freshCat),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST"
+      })
     }
 
     return(
       <div>
-        <h1 id="new-cat-header">Add New Cat</h1>
+        <h1 id="new-cat-header">Add New Pet</h1>
         <Form id = "form">
           <FormGroup>
             <Label htmlFor="name" id="name">Name</Label>
@@ -55,16 +62,16 @@ const NewCat = () => {
             />
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="enjoys" id="enjoys">Enjoys</Label>
+            <Label htmlFor="enjoy" id="enjoy">Enjoys</Label>
             <Input
               type="text"
-              name="enjoys"
+              name="enjoy"
               onChange={ handleChange }
-              value={ form.enjoys }
+              value={ form.enjoy }
             />
           </FormGroup>
         </Form>
-        <button id="submit" onClick={ handleSubmit }>Add New Cat</button>
+        <button id="submit" onClick={ handleSubmit } >Add New Pet</button>
       </div>
     )
 }
